@@ -1,0 +1,50 @@
+<streams>
+
+<immutable_stream name="input_init"
+                  type="input"
+                  filename_template="mesh.nc"
+                  input_interval="initial_only"/>
+
+<immutable_stream name="atmospheric_forcing"
+                  type="input"
+                  filename_template="atmospheric_forcing.nc"
+                  filename_interval="none"
+                  packages="timeVaryingAtmosphericForcingPKG"
+                  input_interval="none"/>
+
+<immutable_stream name="land_ice_forcing"
+                  type="input"
+                  filename_template="land_ice_forcing.nc"
+                  filename_interval="none"
+                  packages="timeVaryingLandIceForcingPKG"
+                  input_interval="none"/>
+
+<stream name="bathymetry"
+        filename_template="mesh.nc"
+        type="input"
+        input_interval="initial_only">
+
+    <var name="bottomDepthObserved"/>
+</stream>
+
+<stream name="output_init"
+        type="output"
+        output_interval="0000_00:00:01"
+        clobber_mode="truncate"
+        filename_template="ocean.nc">
+
+    <stream name="input_init"/>
+    <var_struct name="tracers"/>
+    <var name="refZMid"/>
+    <var name="normalVelocity"/>
+    <var name="layerThickness"/>
+    <var name="restingThickness"/>
+    <var name="refBottomDepth"/>
+    <var name="bottomDepth"/>
+    <var name="bottomDepthObserved"/>
+    <var name="maxLevelCell"/>
+    <var name="vertCoordMovementWeights"/>
+    <var name="ssh"/>
+</stream>
+
+</streams>

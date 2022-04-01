@@ -1,0 +1,1 @@
+/turquoise/usr/projects/climate/jlilly/repos/compass/legacy/ocean/hurricane/sandy_stations/USGS_stations.txt

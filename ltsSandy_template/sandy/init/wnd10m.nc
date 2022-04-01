@@ -1,0 +1,1 @@
+/usr/projects/regionalclimate/COMMON_MPAS/ocean/grids/initial_condition_database/sandy_wnd10m.nc
