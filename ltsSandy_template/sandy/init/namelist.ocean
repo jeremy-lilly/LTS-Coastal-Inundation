@@ -74,12 +74,9 @@
 /
 &wetting_drying
     config_use_wetting_drying = .false.
-    config_prevent_drying = .false.
     config_drying_min_cell_height = 1.0e-3
-    config_zero_drying_velocity = .false.
     config_verify_not_dry = .false.
     config_thickness_flux_type = 'centered'
-    config_drying_safety_height = 1.0e-10
 /
 &ocean_constants
     config_density0 = 1026.0

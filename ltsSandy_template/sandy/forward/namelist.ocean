@@ -279,13 +279,10 @@
     config_explicit_Rayleigh_drag_coeff = 1.0e-3
 /
 &wetting_drying
-    config_use_wetting_drying = .true.
-    config_prevent_drying = .true.
+    config_use_wetting_drying = .false.
     config_drying_min_cell_height = 0.1
-    config_zero_drying_velocity = .true.
     config_verify_not_dry = .false.
     config_thickness_flux_type = 'centered'
-    config_drying_safety_height = 0.001
 /
 &ocean_constants
     config_density0 = 1026.0
