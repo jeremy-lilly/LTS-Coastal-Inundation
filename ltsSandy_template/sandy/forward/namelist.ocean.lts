@@ -28,7 +28,7 @@
     config_dt_scaling_LTS = 4
 /
 &ALE_vertical_grid
-    config_vert_coord_movement = 'uniform_stretching'
+    config_vert_coord_movement = 'impermeable_interfaces'
     config_ALE_thickness_proportionality = 'weights_only'
     config_vert_taper_weight_depth_1 = 250.0
     config_vert_taper_weight_depth_2 = 500.0
@@ -356,14 +356,14 @@
     config_disable_tr_all_tend = .true.
     config_disable_tr_adv = .false.
     config_disable_tr_hmix = .false.
-    config_disable_tr_vmix = .false.
+    config_disable_tr_vmix = .true.
     config_disable_tr_sflux = .false.
     config_disable_tr_nonlocalflux = .false.
     config_disable_redi_k33 = .false.
     config_read_nearest_restart = .false.
 /
 &tracer_forcing_activeTracers
-    config_use_activeTracers = .true.
+    config_use_activeTracers = .false.
     config_use_activeTracers_surface_bulk_forcing = .false.
     config_use_activeTracers_surface_restoring = .false.
     config_use_activeTracers_interior_restoring = .false.
