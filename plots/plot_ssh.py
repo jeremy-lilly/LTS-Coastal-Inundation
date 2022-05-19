@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+
+# Author: Steven Brus
+
 import netCDF4
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
