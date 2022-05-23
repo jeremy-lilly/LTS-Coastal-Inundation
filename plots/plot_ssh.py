@@ -245,5 +245,5 @@ if __name__ == '__main__':
   plt.xlabel('runs')
   plt.ylabel('Avg RMS error across stations')
   plt.tight_layout()
-  fig.savefig('avgErrs.png')
+  fig.savefig('avgErrs.pdf')
 
