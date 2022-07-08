@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 
 
 dcSpeedups = [32.38819058, 35.19573694, 32.43876219, 7.375053323, -17.2438708]
-waSpeedups = [-12.29065634, 34.79578527, 37.53642414, 4.274424697, -20.63420947]
-labels = ['ltsSandy0', 'ltsSandy1', 'ltsSandy2', 'ltsSandy3', 'ltsSandy4']
+waSpeedups = [39.3993047, 34.79578527, 37.53642414, 4.274424697, -20.63420947]
+labels = ['DelBay2km', 'DelBay1km', 'DelBay500m', 'DelBay250m', 'DelBay125m']
 
 width = 0.3
 
