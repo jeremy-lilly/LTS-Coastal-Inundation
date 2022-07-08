@@ -40,23 +40,31 @@ def setConfigs(fileName, configDict):
 def rmse(sol1, sol2):
     diff = abs(sol1 - sol2)
     err = np.sqrt(np.mean(diff**2))
+    #err = np.sqrt(np.sum(diff**2))
     
     return err
 # END rmse()
 
 
-def main(solution, in_pickle, out_pickle, plot_name):
+def main(solution, in_pickle, out_pickle, plot_name, method):
 
-    perfectRate = 3
-    method = 'LTS3 (M = 2)'
+    if method == 'RK4':
+        perfectRate = 4
+    elif method == 'LTS3' or method == 'SSPRK3':
+        perfectRate = 3
+    else:
+        print('bad method')
+        quit()
+
     scaleFactor = 10**(-9 - perfectRate)
 
     if not in_pickle:
 
         # input variables (maybe get these via argparse later)
         numProcs = 36
-        #dts = [30, 24, 20, 18]
-        dts = [18, 12, 10, 8]
+        dts = [12, 8, 6]
+        #dts = [36, 18, 12]
+        #dts = [36, 24, 20, 16]
         
         layerThicknesses = []
         normalVelocities = []
@@ -72,7 +80,7 @@ def main(solution, in_pickle, out_pickle, plot_name):
         for dt in dts:
             setConfigs('namelist.ocean', {'config_dt': str(dt)})
             print('---dt = ' + str(dt))
-            shCommand = 'srun -n ' + str(numProcs) + ' ocean_model -n namelist.ocean -s streams.ocean'
+            shCommand = 'srun -n ' + str(numProcs) + ' ocean_model_ramp1 -n namelist.ocean -s streams.ocean'
             print(shCommand)
             sp.call(shCommand.split())
 
@@ -125,9 +133,11 @@ def main(solution, in_pickle, out_pickle, plot_name):
             print('--err in normalVelocity = ' + str(normalVelocityErrs[i]) )
             print('--max normalized err in layerThickness = ' + str( np.max( abs( layerThicknesses[i] - layerThicknessSol ) / layerThicknessSol ) ))
             print('--max normalized err in normalVelocity = ' + str( np.max( abs( normalVelocities[i] - normalVelocitySol ) / normalVelocitySol ) ))
+            print('--avg normalized err in layerThickness = ' + str( np.mean( abs( layerThicknesses[i] - layerThicknessSol ) / layerThicknessSol ) ))
+            print('--avg normalized err in normalVelocity = ' + str( np.mean( abs( normalVelocities[i] - normalVelocitySol ) / normalVelocitySol ) ))
     
     # END if
-    
+
     fig, ax = plt.subplots(1, 1)
 
     ltFitCoefs = np.polyfit(np.log10(dts), np.log10(layerThicknessErrs), 1)
@@ -141,17 +151,20 @@ def main(solution, in_pickle, out_pickle, plot_name):
     print('----best fit rate for layerThickness = ' + str(ltFitCoefs[0]))
     print('----best fit rate for normalVelocity = ' + str(nvFitCoefs[0]))
     
-    ax.loglog(dts, layerThicknessErrs, '--o', color='tab:blue', label='layerThickness')
-    ax.loglog(dts, 10**ltFit, '-', color='tab:blue')
+    ax.loglog(dts, layerThicknessErrs, '--o', color='tab:blue', label='layer thickness, order = {:.2f}'.format(ltFitCoefs[0]))
+    #ax.loglog(dts, 10**ltFit, '-', color='tab:blue')
     
-    ax.loglog(dts, normalVelocityErrs, '--o', color='tab:orange', label='normalVelocity')
-    ax.loglog(dts, 10**nvFit, '-', color='tab:orange')
+    ax.loglog(dts, normalVelocityErrs, '--o', color='tab:orange', label='normal velocity, order = {:.2f}'.format(nvFitCoefs[0]))
+    #ax.loglog(dts, 10**nvFit, '-', color='tab:orange')
     
-    ax.loglog(dts, perfect, 'k-', label='perfect rate')
+    ax.loglog(dts, perfect, 'k-', label='order {}'.format(perfectRate))
     
-    ax.set(xlabel='dt',
+    ax.set(xlabel='dt (s)',
            ylabel='RMS Error',
            title='Convergence in time for ' + method)
+    #ax.set_xlim(dts[-1] - 1, dts[0] + 1)
+    #ax.set_ylim(10**(-10), 10**(-7))
+    ax.set_xticks([12])
     ax.legend()
 
     plt.savefig(plot_name)
@@ -178,9 +191,13 @@ if __name__ == '__main__':
     parser.add_argument('-p', '--plot-name', dest='plot_name',
                         default='convergence_plot.png',
                         help='Name for output plot png.')
+    
+    parser.add_argument('-m', '--method', dest='method',
+                        default='RK4',
+                        help='Name of time-stepping method.')
 
     args = parser.parse_args()
 
 
-    main(args.solution, args.in_pickle, args.out_pickle, args.plot_name)
+    main(args.solution, args.in_pickle, args.out_pickle, args.plot_name, args.method)
 
